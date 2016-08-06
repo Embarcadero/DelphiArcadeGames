@@ -1,0 +1,52 @@
+object FrameInstructions: TFrameInstructions
+  Size.Width = 480.000000000000000000
+  Size.Height = 320.000000000000000000
+  Size.PlatformDefault = False
+  object Rectangle1: TRectangle
+    Align = Contents
+    Fill.Color = claBlack
+    Opacity = 0.500000000000000000
+    Size.Width = 480.000000000000000000
+    Size.Height = 320.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+  end
+  object ContinueBTN: TButton
+    Align = Bottom
+    Margins.Left = 50.000000000000000000
+    Margins.Right = 50.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Position.X = 50.000000000000000000
+    Position.Y = 278.000000000000000000
+    Size.Width = 380.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Text = 'Continue'
+  end
+  object Text1: TText
+    Align = Client
+    Margins.Left = 50.000000000000000000
+    Margins.Right = 50.000000000000000000
+    Size.Width = 380.000000000000000000
+    Size.Height = 189.000000000000000000
+    Size.PlatformDefault = False
+    Text = 
+      'Destroy all of the invading aliens to move to the next level. Pr' +
+      'ess the left arrow button or key to move left. Press the right a' +
+      'rrow button or key to move right. Press the fire button or Z key' +
+      ' to fire. You have three lives. Watch out for alien ships!'
+    TextSettings.FontColor = claWhite
+  end
+  object Label1: TLabel
+    Align = Top
+    StyledSettings = [Family, Style]
+    Size.Width = 480.000000000000000000
+    Size.Height = 89.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 25.000000000000000000
+    TextSettings.FontColor = claWhite
+    TextSettings.HorzAlign = Center
+    Text = 'Instructions'
+  end
+end
