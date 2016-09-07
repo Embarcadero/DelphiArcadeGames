@@ -1,0 +1,262 @@
+object FrameHighScores: TFrameHighScores
+  Size.Width = 480.000000000000000000
+  Size.Height = 320.000000000000000000
+  Size.PlatformDefault = False
+  object Rectangle1: TRectangle
+    Align = Contents
+    Fill.Color = claBlack
+    Opacity = 0.500000000000000000
+    Size.Width = 480.000000000000000000
+    Size.Height = 320.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+  end
+  object ContinueBTN: TButton
+    Align = Bottom
+    Margins.Left = 50.000000000000000000
+    Margins.Top = 10.000000000000000000
+    Margins.Right = 50.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Position.X = 50.000000000000000000
+    Position.Y = 278.000000000000000000
+    Size.Width = 380.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 16
+    Text = 'Continue'
+  end
+  object ListView1: TListView
+    ItemAppearanceClassName = 'TListItemRightDetailAppearance'
+    ItemEditAppearanceClassName = 'TListItemRightDetailDeleteAppearance'
+    HeaderAppearanceClassName = 'TListHeaderObjects'
+    FooterAppearanceClassName = 'TListHeaderObjects'
+    Transparent = True
+    AlternatingColors = True
+    Align = Client
+    Margins.Left = 20.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Opacity = 0.750000000000000000
+    Size.Width = 440.000000000000000000
+    Size.Height = 179.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 33
+    ItemAppearanceObjects.ItemObjects.Accessory.Visible = False
+    CanSwipeDelete = False
+    ShowSelection = False
+    SearchAlwaysOnTop = False
+  end
+  object Label1: TLabel
+    Align = Top
+    StyledSettings = [Family, Style]
+    Size.Width = 480.000000000000000000
+    Size.Height = 89.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 25.000000000000000000
+    TextSettings.FontColor = claWhite
+    TextSettings.HorzAlign = Center
+    Text = 'High Scores'
+  end
+  object InputBGRect: TRectangle
+    Align = Contents
+    Fill.Color = claBlack
+    Opacity = 0.500000000000000000
+    Size.Width = 480.000000000000000000
+    Size.Height = 320.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    Visible = False
+  end
+  object InputBoxRect: TRectangle
+    Align = Center
+    Size.Width = 319.000000000000000000
+    Size.Height = 175.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = claDarkgray
+    Visible = False
+    XRadius = 10.000000000000000000
+    YRadius = 10.000000000000000000
+    object Label2: TLabel
+      Align = Top
+      StyledSettings = [Family]
+      Margins.Top = 10.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 319.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 24.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = xFF393939
+      TextSettings.HorzAlign = Center
+      Text = 'Enter Your Name?'
+    end
+    object InputEdit: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Center
+      StyleLookup = 'clearingeditstyle'
+      TabOrder = 1
+      Size.Width = 246.000000000000000000
+      Size.Height = 37.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object GridPanelLayout1: TGridPanelLayout
+      Align = Bottom
+      Position.Y = 125.000000000000000000
+      Size.Width = 319.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      ColumnCollection = <
+        item
+          Value = 50.000000000000000000
+        end
+        item
+          Value = 50.000000000000000000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = OkayBTN
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = CancelBTN
+          Row = 0
+        end>
+      RowCollection = <
+        item
+          Value = 100.000000000000000000
+        end>
+      object OkayBTN: TButton
+        Anchors = []
+        Position.X = 31.250000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 97.000000000000000000
+        Size.Height = 36.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Okay'
+        OnClick = OkayBTNClick
+      end
+      object CancelBTN: TButton
+        Anchors = []
+        Position.X = 190.250000000000000000
+        Position.Y = 7.000000000000000000
+        Size.Width = 98.000000000000000000
+        Size.Height = 36.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Cancel'
+        OnClick = CancelBTNClick
+      end
+    end
+    object Line1: TLine
+      Align = Top
+      LineType = Top
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Position.Y = 45.000000000000000000
+      Size.Width = 299.000000000000000000
+      Size.Height = 4.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claDarkgray
+    end
+  end
+  object FireScoresList: TFDConnection
+    Params.Strings = (
+      'Database='
+      'DriverID=SQLite')
+    LoginPrompt = False
+    AfterConnect = FireScoresListAfterConnect
+    BeforeConnect = FireScoresListBeforeConnect
+    Left = 40
+    Top = 28
+  end
+  object FDTableHighScores: TFDTable
+    IndexFieldNames = 'Score'
+    Connection = FireScoresList
+    FormatOptions.AssignedValues = [fvSortOptions]
+    FormatOptions.SortOptions = [soDescending]
+    UpdateOptions.UpdateTableName = 'HighScores'
+    TableName = 'HighScores'
+    Left = 40
+    Top = 84
+    object FDTableHighScoresName: TWideMemoField
+      FieldName = 'Name'
+      BlobType = ftWideMemo
+    end
+    object FDTableHighScoresScore: TIntegerField
+      FieldName = 'Score'
+    end
+  end
+  object FDQueryDelete: TFDQuery
+    Connection = FireScoresList
+    SQL.Strings = (
+      'DELETE FROM HighScores WHERE Name = (:Name)')
+    Left = 336
+    Top = 28
+    ParamData = <
+      item
+        Name = 'NAME'
+        ParamType = ptInput
+      end
+      item
+        Name = 'SCORE'
+        ParamType = ptInput
+      end>
+  end
+  object FDQueryInsert: TFDQuery
+    Connection = FireScoresList
+    SQL.Strings = (
+      'INSERT INTO HighScores (Name,Score) VALUES (:Name,:Score)')
+    Left = 408
+    Top = 28
+    ParamData = <
+      item
+        Name = 'NAME'
+        ParamType = ptInput
+      end
+      item
+        Name = 'SCORE'
+        ParamType = ptInput
+      end>
+  end
+  object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
+    Left = 384
+    Top = 220
+  end
+  object FDGUIxWaitCursor1: TFDGUIxWaitCursor
+    Provider = 'FMX'
+    Left = 72
+    Top = 220
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSet = FDTableHighScores
+    ScopeMappings = <>
+    Left = 408
+    Top = 76
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 332
+    Top = 77
+    object LinkFillControlToField2: TLinkFillControlToField
+      Category = 'Quick Bindings'
+      Control = ListView1
+      Track = True
+      FillDataSource = BindSourceDB1
+      FillDisplayFieldName = 'Name'
+      AutoFill = True
+      FillExpressions = <
+        item
+          SourceMemberName = 'Score'
+          ControlMemberName = 'Detail'
+        end>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
+    end
+  end
+end

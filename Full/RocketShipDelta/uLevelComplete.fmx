@@ -1,0 +1,50 @@
+object FrameLevelComplete: TFrameLevelComplete
+  Size.Width = 480.000000000000000000
+  Size.Height = 320.000000000000000000
+  Size.PlatformDefault = False
+  object Rectangle1: TRectangle
+    Align = Contents
+    Fill.Color = claBlack
+    Opacity = 0.500000000000000000
+    Size.Width = 480.000000000000000000
+    Size.Height = 320.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+  end
+  object Label1: TLabel
+    Align = Top
+    StyledSettings = [Family, Style]
+    Size.Width = 480.000000000000000000
+    Size.Height = 89.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 25.000000000000000000
+    TextSettings.FontColor = claWhite
+    TextSettings.HorzAlign = Center
+    Text = 'Level Complete'
+  end
+  object ContinueBTN: TButton
+    Align = Bottom
+    Margins.Left = 50.000000000000000000
+    Margins.Right = 50.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Position.X = 50.000000000000000000
+    Position.Y = 278.000000000000000000
+    Size.Width = 380.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Text = 'Continue'
+  end
+  object InfoText: TText
+    Align = Client
+    Margins.Left = 50.000000000000000000
+    Margins.Right = 50.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Size.Width = 380.000000000000000000
+    Size.Height = 179.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 24.000000000000000000
+    TextSettings.Font.Style = [fsBold]
+    TextSettings.FontColor = claWhite
+  end
+end
