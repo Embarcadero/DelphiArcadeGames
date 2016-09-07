@@ -17,7 +17,7 @@ uses
   System.Variants, System.IniFiles,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.ListBox,
-  FMX.Objects, FMX.ListView.Types, FMX.ListView, FireDAC.Phys.SQLiteDef,
+  FMX.Objects, FMX.ListView.Types, FMX.ListView,
   FMX.Controls.Presentation, FMX.Edit, FMX.ListView.Appearances,
   FMX.ListView.Adapters.Base;
 

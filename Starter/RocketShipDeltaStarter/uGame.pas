@@ -264,9 +264,6 @@ type
     ScreenOrientation: TScreenOrientation;
     OrientationChangedId: Integer;
 
-    NetworkConnected: Boolean;
-    NetworkChecking: Boolean;
-
     procedure ResetPeople;
     procedure ResetPlasmaFence;
     procedure ResetLayout;

@@ -196,9 +196,6 @@ type
     ScreenOrientation: TScreenOrientation;
     OrientationChangedId: Integer;
 
-    NetworkConnected: Boolean;
-    NetworkChecking: Boolean;
-
     procedure SwapListXY(List: TStringList);
     procedure SwapXY;
     procedure OrientationChanged(const Sender: TObject; const Msg: TMessage);

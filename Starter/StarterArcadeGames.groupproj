@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{78EF641D-0490-4CCC-8603-2F904E38CE3C}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="AlienInvasionStarter\AlienInvasion.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="MarsRocketStarter\MarsRocket.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RocketShipDeltaStarter\RocketShipDelta.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="SpaceRocksStarter\SpaceRocks.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="AlienInvasion">
+        <MSBuild Projects="AlienInvasionStarter\AlienInvasion.dproj"/>
+    </Target>
+    <Target Name="AlienInvasion:Clean">
+        <MSBuild Projects="AlienInvasionStarter\AlienInvasion.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="AlienInvasion:Make">
+        <MSBuild Projects="AlienInvasionStarter\AlienInvasion.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MarsRocket">
+        <MSBuild Projects="MarsRocketStarter\MarsRocket.dproj"/>
+    </Target>
+    <Target Name="MarsRocket:Clean">
+        <MSBuild Projects="MarsRocketStarter\MarsRocket.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MarsRocket:Make">
+        <MSBuild Projects="MarsRocketStarter\MarsRocket.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RocketShipDelta">
+        <MSBuild Projects="RocketShipDeltaStarter\RocketShipDelta.dproj"/>
+    </Target>
+    <Target Name="RocketShipDelta:Clean">
+        <MSBuild Projects="RocketShipDeltaStarter\RocketShipDelta.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RocketShipDelta:Make">
+        <MSBuild Projects="RocketShipDeltaStarter\RocketShipDelta.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SpaceRocks">
+        <MSBuild Projects="SpaceRocksStarter\SpaceRocks.dproj"/>
+    </Target>
+    <Target Name="SpaceRocks:Clean">
+        <MSBuild Projects="SpaceRocksStarter\SpaceRocks.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SpaceRocks:Make">
+        <MSBuild Projects="SpaceRocksStarter\SpaceRocks.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="AlienInvasion;MarsRocket;RocketShipDelta;SpaceRocks"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="AlienInvasion:Clean;MarsRocket:Clean;RocketShipDelta:Clean;SpaceRocks:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="AlienInvasion:Make;MarsRocket:Make;RocketShipDelta:Make;SpaceRocks:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
