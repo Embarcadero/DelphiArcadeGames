@@ -229,9 +229,6 @@ type
     ScreenOrientation: TScreenOrientation;
     OrientationChangedId: Integer;
 
-    NetworkConnected: Boolean;
-    NetworkChecking: Boolean;
-
     procedure SwapListXY(List: TStringList);
     procedure SwapXY;
     procedure OrientationChanged(const Sender: TObject; const Msg: TMessage);
@@ -283,8 +280,6 @@ type
     procedure CreateExplosion(X, Y: Single);
 
     procedure BitmapToRectangle(B: TBitmap; R: TRectangle);
-    function IntersectCircle(R1, R2: TRectangle): Boolean;
-    function GetTargetAngle(TargetX, TargetY, OriginX, OriginY: Single): Single;
     function GetPoolObj(Pool: TStringList): TRectangle;
     procedure SetPoolObj(Pool: TStringList; Name: String; Obj: TRectangle);
     procedure PauseBitmapListAnimations(Value: Boolean);
@@ -300,7 +295,6 @@ type
     procedure LoadSettings;
     procedure SaveAndExitSettings;
     function GetTheMostRightEnemyPosition(EnemyList: TStringList): Single;
-    function GetTheMostTopEnemyPosition(EnemyList: TStringList): Single;
     procedure GyroToggle;
     procedure ProcessAccelerometer;
   public
@@ -859,19 +853,6 @@ begin
   SaveAndExitSettings;
 end;
 
-function TGameForm.IntersectCircle(R1, R2: TRectangle): Boolean;
-var
-  Distance: Single;
-begin
-  Result := False;
-  Distance := R1.Position.Point.Distance(R2.Position.Point);
-  if Distance < ((Max(R1.Width, R1.Height) / 2) + (Max(R2.Width, R2.Height) / 2))
-  then
-  begin
-    Result := True;
-  end;
-end;
-
 procedure TGameForm.ProcessAccelerometer;
 var
   AccX, AccY: Single;
@@ -1059,7 +1040,7 @@ begin
           EnemyObj := TRectangle(EnemyList.Objects[II]);
           if EnemyObj.Tag <> 0 then
           begin
-            EnemyRect := EnemyObj.ParentedRect;
+            EnemyRect := EnemyObj.BoundsRect;
           end
           else
             EnemyRect := EnemyObj.AbsoluteRect;
@@ -1098,7 +1079,7 @@ begin
         for II := 0 to CollectList.Count - 1 do
         begin
           CollectObj := TRectangle(CollectList.Objects[II]);
-          if IntersectRect(CollectObj.ParentedRect, ProjObj.ParentedRect) then
+          if IntersectRect(CollectObj.BoundsRect, ProjObj.BoundsRect) then
           // if IntersectRect(CollectObj.AbsoluteRect, ProjObj.AbsoluteRect) then
           // if RockObj.PointInObject(ProjObj.Position.X,ProjObj.Position.Y) then
           begin
@@ -1326,27 +1307,27 @@ begin
       CollectObj.Position.Y := CollectObj.Position.Y + CollectObj.Tag *
         Sin(CollectAngle);
 
-      if (CollectObj.ParentedRect.CenterPoint.X >=
+      if (CollectObj.BoundsRect.CenterPoint.X >=
         (ScreenLayout.Width + (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (ScreenLayout.Position.X + 1) -
           (CollectObj.Width / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y >=
+      if (CollectObj.BoundsRect.CenterPoint.Y >=
         (ScreenLayout.Height + (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (ScreenLayout.Position.Y + 1) -
           (CollectObj.Height / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.X <= (ScreenLayout.Position.X -
+      if (CollectObj.BoundsRect.CenterPoint.X <= (ScreenLayout.Position.X -
         (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (ScreenLayout.Width - 1);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y <= (ScreenLayout.Position.Y -
+      if (CollectObj.BoundsRect.CenterPoint.Y <= (ScreenLayout.Position.Y -
         (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (ScreenLayout.Height - 1);
@@ -1425,19 +1406,6 @@ begin
   Result := X;
 end;
 
-function TGameForm.GetTheMostTopEnemyPosition(EnemyList: TStringList): Single;
-var
-  I: Integer;
-  Y: Single;
-begin
-  Y := 0;
-  for I := 0 to EnemyList.Count - 1 do
-    if (TRectangle(EnemyList.Objects[I]).Position.Y > Y) and
-      (TRectangle(EnemyList.Objects[I]).Tag = 0) then
-      Y := TRectangle(EnemyList.Objects[I]).Position.Y;
-  Result := Y;
-end;
-
 procedure TGameForm.GyroBTNClick(Sender: TObject);
 begin
   GyroToggle;
@@ -1463,15 +1431,6 @@ begin
     GyroOffLine.Visible := False;
     MotionSensor.Active := True;
   end;
-end;
-
-function TGameForm.GetTargetAngle(TargetX, TargetY, OriginX,
-  OriginY: Single): Single;
-var
-  Radians: Single;
-begin
-  Radians := ArcTan2(TargetY - OriginY, TargetX - OriginX);
-  Result := Radians / (PI / 180) + 90;
 end;
 
 procedure TGameForm.PlayerHit;

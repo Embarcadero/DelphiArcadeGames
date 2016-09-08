@@ -158,8 +158,8 @@ var
     winRunLoopMode : CFStringRef;
   {$ENDIF}
 begin
+  Result := -1;
   try
-    Result := -1;
     New(wSndRec);
     wSndRec.SFilename := ASoundFile;
     wSndRec.SNameExt := ExtractFilename(ASoundFile);

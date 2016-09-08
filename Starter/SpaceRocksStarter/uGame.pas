@@ -250,7 +250,6 @@ type
 
     procedure BitmapToRectangle(B: TBitmap; R: TRectangle);
     function IntersectCircle(R1,R2: TRectangle): Boolean;
-    function GetTargetAngle(TargetX, TargetY, OriginX, OriginY: Single): Single;
     function GetPoolObj(Pool: TStringList): TRectangle;
     procedure SetPoolObj(Pool: TStringList; Name: String; Obj: TRectangle);
     procedure PauseBitmapListAnimations(Value: Boolean);
@@ -996,22 +995,22 @@ begin
   Ship.Position.X := Ship.Position.X + PlayerData.SpeedX;
   Ship.Position.Y := Ship.Position.Y - PlayerData.SpeedY;
 
-  if (Ship.ParentedRect.CenterPoint.X>=(ScreenLayout.Width+(Ship.Width/2))) then
+  if (Ship.BoundsRect.CenterPoint.X>=(ScreenLayout.Width+(Ship.Width/2))) then
    begin
     Ship.Position.X := (ScreenLayout.Position.X+1)-(Ship.Width/2);
    end;
 
-  if (Ship.ParentedRect.CenterPoint.Y>=(ScreenLayout.Height+(Ship.Height/2))) then
+  if (Ship.BoundsRect.CenterPoint.Y>=(ScreenLayout.Height+(Ship.Height/2))) then
    begin
      Ship.Position.Y := (ScreenLayout.Position.Y+1)-(Ship.Height/2);
    end;
 
-  if (Ship.ParentedRect.CenterPoint.X<=(ScreenLayout.Position.X-(Ship.Width/2))) then
+  if (Ship.BoundsRect.CenterPoint.X<=(ScreenLayout.Position.X-(Ship.Width/2))) then
    begin
     Ship.Position.X := (ScreenLayout.Width-1);
    end;
 
-  if (Ship.ParentedRect.CenterPoint.Y<=(ScreenLayout.Position.Y-(Ship.Height/2))) then
+  if (Ship.BoundsRect.CenterPoint.Y<=(ScreenLayout.Position.Y-(Ship.Height/2))) then
    begin
     Ship.Position.Y := (ScreenLayout.Height-1);
    end;
@@ -1045,7 +1044,7 @@ begin
         for II := 0 to RockList.Count-1 do
          begin
           RockObj := TRectangle(RockList.Objects[II]);
-          if IntersectRect(RockObj.ParentedRect,ProjObj.ParentedRect) then
+          if IntersectRect(RockObj.BoundsRect,ProjObj.BoundsRect) then
            begin
              RockObj.TagFloat := RockObj.TagFloat+1;
              ProjObj.TagFloat := PlayerData.ProjDuration+1;
@@ -1057,7 +1056,7 @@ begin
         for II := 0 to EnemyList.Count-1 do
          begin
           EnemyObj := TRectangle(EnemyList.Objects[II]);
-          if IntersectRect(EnemyObj.ParentedRect,ProjObj.ParentedRect) then
+          if IntersectRect(EnemyObj.BoundsRect,ProjObj.BoundsRect) then
            begin
              EnemyObj.TagFloat := EnemyObj.TagFloat+1;
              ProjObj.TagFloat := PlayerData.ProjDuration+1;
@@ -1065,22 +1064,22 @@ begin
            end;
          end;
 
-        if (ProjObj.ParentedRect.CenterPoint.X>=(ScreenLayout.Width+(ProjObj.Width/2))) then
+        if (ProjObj.BoundsRect.CenterPoint.X>=(ScreenLayout.Width+(ProjObj.Width/2))) then
          begin
           ProjObj.Position.X := (ScreenLayout.Position.X+1)-(ProjObj.Width/2);
          end;
 
-        if (ProjObj.ParentedRect.CenterPoint.Y>=(ScreenLayout.Height+(ProjObj.Height/2))) then
+        if (ProjObj.BoundsRect.CenterPoint.Y>=(ScreenLayout.Height+(ProjObj.Height/2))) then
          begin
            ProjObj.Position.Y := (ScreenLayout.Position.Y+1)-(ProjObj.Height/2);
          end;
 
-        if (ProjObj.ParentedRect.CenterPoint.X<=(ScreenLayout.Position.X-(ProjObj.Width/2))) then
+        if (ProjObj.BoundsRect.CenterPoint.X<=(ScreenLayout.Position.X-(ProjObj.Width/2))) then
          begin
           ProjObj.Position.X := (ScreenLayout.Width-1);
          end;
 
-        if (ProjObj.ParentedRect.CenterPoint.Y<=(ScreenLayout.Position.Y-(ProjObj.Height/2))) then
+        if (ProjObj.BoundsRect.CenterPoint.Y<=(ScreenLayout.Position.Y-(ProjObj.Height/2))) then
          begin
           ProjObj.Position.Y := (ScreenLayout.Height-1);
          end;
@@ -1101,7 +1100,7 @@ begin
         RockObj := TRectangle(RockList.Objects[I]);
 
         if PlayerData.Invulnerable=0 then
-          if IntersectRect(RockObj.ParentedRect,Ship.ParentedRect) then
+          if IntersectRect(RockObj.BoundsRect,Ship.BoundsRect) then
             if IntersectCircle(RockObj,Ship) then
              begin
               PlayerHit;
@@ -1139,22 +1138,22 @@ begin
             RockAngle := RockObj.RotationAngle * PI / 180;
             RockObj.Position.X := RockObj.Position.X + RockObj.Tag * Cos(RockAngle);
             RockObj.Position.Y := RockObj.Position.Y + RockObj.Tag * Sin(RockAngle);
-            if (RockObj.ParentedRect.CenterPoint.X>=(ScreenLayout.Width+(RockObj.Width/2))) then
+            if (RockObj.BoundsRect.CenterPoint.X>=(ScreenLayout.Width+(RockObj.Width/2))) then
              begin
               RockObj.Position.X := (ScreenLayout.Position.X+1)-(RockObj.Width/2);
              end;
 
-            if (RockObj.ParentedRect.CenterPoint.Y>=(ScreenLayout.Height+(RockObj.Height/2))) then
+            if (RockObj.BoundsRect.CenterPoint.Y>=(ScreenLayout.Height+(RockObj.Height/2))) then
              begin
                RockObj.Position.Y := (ScreenLayout.Position.Y+1)-(RockObj.Height/2);
              end;
 
-            if (RockObj.ParentedRect.CenterPoint.X<=(ScreenLayout.Position.X-(RockObj.Width/2))) then
+            if (RockObj.BoundsRect.CenterPoint.X<=(ScreenLayout.Position.X-(RockObj.Width/2))) then
              begin
               RockObj.Position.X := (ScreenLayout.Width-1);
              end;
 
-            if (RockObj.ParentedRect.CenterPoint.Y<=(ScreenLayout.Position.Y-(RockObj.Height/2))) then
+            if (RockObj.BoundsRect.CenterPoint.Y<=(ScreenLayout.Position.Y-(RockObj.Height/2))) then
              begin
               RockObj.Position.Y := (ScreenLayout.Height-1);
              end;
@@ -1171,7 +1170,7 @@ begin
         EnemyObj.Position.Y := EnemyObj.Position.Y + EnemyObj.Tag * Sin(EnemyAngle);
 
         if PlayerData.Invulnerable=0 then
-          if IntersectRect(Ship.ParentedRect,EnemyObj.ParentedRect) then
+          if IntersectRect(Ship.BoundsRect,EnemyObj.BoundsRect) then
            begin
              PlayerHit;
              EnemyObj.TagFloat := EnemyObj.TagFloat+1;
@@ -1210,7 +1209,7 @@ begin
         EnemyProjObj.Position.Y := EnemyProjObj.Position.Y + EnemyProjObj.Tag * Sin(EnemyProjAngle);
 
         if PlayerData.Invulnerable=0 then
-          if IntersectRect(Ship.ParentedRect,EnemyProjObj.ParentedRect) then
+          if IntersectRect(Ship.BoundsRect,EnemyProjObj.BoundsRect) then
            begin
              PlayerHit;
              EnemyProjObj.TagFloat := EnemyProjObj.TagFloat+1;
@@ -1253,27 +1252,27 @@ begin
         CollectObj.Position.X := CollectObj.Position.X + CollectObj.Tag * Cos(CollectAngle);
         CollectObj.Position.Y := CollectObj.Position.Y + CollectObj.Tag * Sin(CollectAngle);
 
-        if (CollectObj.ParentedRect.CenterPoint.X>=(ScreenLayout.Width+(CollectObj.Width/2))) then
+        if (CollectObj.BoundsRect.CenterPoint.X>=(ScreenLayout.Width+(CollectObj.Width/2))) then
          begin
           CollectObj.Position.X := (ScreenLayout.Position.X+1)-(CollectObj.Width/2);
          end;
 
-        if (CollectObj.ParentedRect.CenterPoint.Y>=(ScreenLayout.Height+(CollectObj.Height/2))) then
+        if (CollectObj.BoundsRect.CenterPoint.Y>=(ScreenLayout.Height+(CollectObj.Height/2))) then
          begin
            CollectObj.Position.Y := (ScreenLayout.Position.Y+1)-(CollectObj.Height/2);
          end;
 
-        if (CollectObj.ParentedRect.CenterPoint.X<=(ScreenLayout.Position.X-(CollectObj.Width/2))) then
+        if (CollectObj.BoundsRect.CenterPoint.X<=(ScreenLayout.Position.X-(CollectObj.Width/2))) then
          begin
           CollectObj.Position.X := (ScreenLayout.Width-1);
          end;
 
-        if (CollectObj.ParentedRect.CenterPoint.Y<=(ScreenLayout.Position.Y-(CollectObj.Height/2))) then
+        if (CollectObj.BoundsRect.CenterPoint.Y<=(ScreenLayout.Position.Y-(CollectObj.Height/2))) then
          begin
           CollectObj.Position.Y := (ScreenLayout.Height-1);
          end;
 
-        if IntersectRect(Ship.ParentedRect,CollectObj.ParentedRect) then
+        if IntersectRect(Ship.BoundsRect,CollectObj.BoundsRect) then
          begin
            AddScore(5000);
            CollectObj.TagFloat := COLLECTITEM_DURATION+1;
@@ -1310,14 +1309,6 @@ begin
   {$IFDEF DEBUG}
   FPSLBL.Text := IntToStr(TThread.GetTickCount-Time) + ' ms';
   {$ENDIF}
-end;
-
-function TGameForm.GetTargetAngle(TargetX, TargetY, OriginX, OriginY: Single): Single;
-var
-  Radians: Single;
-begin
-  Radians  := ArcTan2(TargetY - OriginY, TargetX - OriginX);
-  Result := radians / (PI / 180) + 90;
 end;
 
 procedure TGameForm.GyroBTNClick(Sender: TObject);

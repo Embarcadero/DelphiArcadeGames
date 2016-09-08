@@ -335,7 +335,6 @@ type
     procedure CreatePeople;
 
     procedure BitmapToRectangle(B: TBitmap; R: TRectangle);
-    function IntersectCircle(R1, R2: TRectangle): Boolean;
     function GetTargetAngle(TargetX, TargetY, OriginX, OriginY: Single): Single;
     function GetPoolObj(Pool: TStringList): TShape;
     procedure SetPoolObj(Pool: TStringList; Name: String; Obj: TShape);
@@ -1039,18 +1038,6 @@ begin
   ShowMainMenu;
 end;
 
-function TGameForm.IntersectCircle(R1, R2: TRectangle): Boolean;
-var
-  Distance: Single;
-begin
-  Result := False;
-  Distance := R1.Position.Point.Distance(R2.Position.Point);
-  if Distance < ((R1.Width / 2) + (R2.Width / 2)) then
-  begin
-    Result := True;
-  end;
-end;
-
 function TGameForm.IsAttackDistance(R1, R2: TRectangle; Range: Single): Boolean;
 var
   Distance: Single;
@@ -1073,6 +1060,7 @@ begin
   if (PeopleList.Count > 0) then
   begin
     ClosestDistance := MapLayout1.Width;
+    PersonObj := nil;
     for I := PeopleList.Count - 1 downto 0 do
     begin
       TmpDistance := EnemyObj.Position.Point.Distance
@@ -1383,7 +1371,7 @@ begin
           for II := 0 to EnemyList.Count - 1 do
           begin
             EnemyObj := TRectangle(EnemyList.Objects[II]);
-            if IntersectRect(EnemyObj.ParentedRect, ProjObj.ParentedRect) then
+            if IntersectRect(EnemyObj.BoundsRect, ProjObj.BoundsRect) then
             begin
               EnemyObj.TagFloat := EnemyObj.TagFloat + 1;
               ProjObj.TagFloat := PlayerData.ProjDuration + 1;
@@ -1396,7 +1384,7 @@ begin
           begin
             PersonObj := TRectangle(PeopleList.Objects[II]);
 
-            if IntersectRect(PersonObj.ParentedRect, ProjObj.ParentedRect) then
+            if IntersectRect(PersonObj.BoundsRect, ProjObj.BoundsRect) then
             begin
               PersonObj.TagFloat := PersonObj.TagFloat + 1;
               ProjObj.TagFloat := PlayerData.ProjDuration + 1;
@@ -1458,7 +1446,7 @@ begin
         Sin(EnemyAngle);
 
       if PlayerData.Invulnerable = 0 then
-        if IntersectRect(Ship.ParentedRect, EnemyObj.ParentedRect) then
+        if IntersectRect(Ship.BoundsRect, EnemyObj.BoundsRect) then
         begin
           PlayerHit;
           EnemyObj.TagFloat := EnemyObj.TagFloat + 1;
@@ -1471,7 +1459,7 @@ begin
           for II := 0 to PeopleList.Count - 1 do
           begin
             PersonObj := TRectangle(PeopleList.Objects[II]);
-            if IntersectRect(PersonObj.ParentedRect, EnemyObj.ParentedRect) AND
+            if IntersectRect(PersonObj.BoundsRect, EnemyObj.BoundsRect) AND
               (PersonObj.TagString = PEOPLE_STATE_NONE) then
             begin
               PersonObj.TagObject := EnemyObj;
@@ -1567,7 +1555,7 @@ begin
         Sin(EnemyProjAngle);
 
       if PlayerData.Invulnerable = 0 then
-        if IntersectRect(Ship.ParentedRect, EnemyProjObj.ParentedRect) then
+        if IntersectRect(Ship.BoundsRect, EnemyProjObj.BoundsRect) then
         begin
           PlayerHit;
           EnemyProjObj.TagFloat := EnemyProjObj.TagFloat + 1;
@@ -1703,33 +1691,33 @@ begin
       CollectObj.Position.Y := CollectObj.Position.Y + CollectObj.Tag *
         Sin(CollectAngle);
 
-      if (CollectObj.ParentedRect.CenterPoint.X >=
+      if (CollectObj.BoundsRect.CenterPoint.X >=
         (MapLayout1.Width + (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (MapLayout1.Position.X + 1) -
           (CollectObj.Width / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y >=
+      if (CollectObj.BoundsRect.CenterPoint.Y >=
         (MapLayout1.Height + (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (MapLayout1.Position.Y + 1) -
           (CollectObj.Height / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.X <=
+      if (CollectObj.BoundsRect.CenterPoint.X <=
         (MapLayout1.Position.X - (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (MapLayout1.Width - 1);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y <=
+      if (CollectObj.BoundsRect.CenterPoint.Y <=
         (MapLayout1.Position.Y - (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (MapLayout1.Height - 1);
       end;
 
-      if IntersectRect(Ship.ParentedRect, CollectObj.ParentedRect) then
+      if IntersectRect(Ship.BoundsRect, CollectObj.BoundsRect) then
       begin
         AddScore(5000);
         CollectObj.TagFloat := COLLECTITEM_DURATION + 1;
@@ -1786,7 +1774,7 @@ begin
     if Portal2.TagFloat > 0 then
       Portal2.TagFloat := Portal2.TagFloat - 1;
 
-    if IntersectRect(Ship.ParentedRect, Portal1.ParentedRect) then
+    if IntersectRect(Ship.BoundsRect, Portal1.BoundsRect) then
     begin
       if Portal1.TagFloat = 0 then
       begin
@@ -1794,7 +1782,7 @@ begin
         WarpToObject(Portal2);
       end;
     end
-    else if IntersectRect(Ship.ParentedRect, Portal2.ParentedRect) then
+    else if IntersectRect(Ship.BoundsRect, Portal2.BoundsRect) then
     begin
       if Portal2.TagFloat = 0 then
       begin

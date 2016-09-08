@@ -183,9 +183,6 @@ type
     LScreenOut: Boolean;
     CleanedUp: Boolean;
 
-    NetworkConnected: Boolean;
-    NetworkChecking: Boolean;
-
     ScreenOrientation: TScreenOrientation;
     OrientationChangedId: Integer;
     procedure OrientationChanged(const Sender: TObject; const Msg: TMessage);
@@ -233,8 +230,6 @@ type
     procedure AssignInterfaceBackground(R: TRectangle);
     procedure ResetGround;
     procedure BitmapToRectangle(B: TBitmap; R: TRectangle);
-    function IntersectCircle(R1, R2: TRectangle): Boolean;
-    function GetTargetAngle(TargetX, TargetY, OriginX, OriginY: Single): Single;
     function GetPoolObj(Pool: TStringList): TRectangle;
     procedure SetPoolObj(Pool: TStringList; Name: String; Obj: TRectangle);
     procedure PauseBitmapListAnimations(Value: Boolean);
@@ -781,18 +776,6 @@ begin
   ShowMainMenu;
 end;
 
-function TGameForm.IntersectCircle(R1, R2: TRectangle): Boolean;
-var
-  Distance: Single;
-begin
-  Result := False;
-  Distance := R1.Position.Point.Distance(R2.Position.Point);
-  if Distance < ((R1.Width / 2) + (R2.Width / 2)) then
-  begin
-    Result := True;
-  end;
-end;
-
 procedure TGameForm.ProcessAccelerometer;
 var
   AccX, AccY: Single;
@@ -1057,7 +1040,7 @@ begin
     for I := 0 to GroundList.Count - 1 do
     begin
       GroundObj := TRectangle(GroundList.Objects[I]);
-      if IntersectRect(GroundObj.ParentedRect, Ship.ParentedRect) then
+      if IntersectRect(GroundObj.BoundsRect, Ship.BoundsRect) then
       begin
         if (Ship.RotationAngle > -10) AND (Ship.RotationAngle < 10) AND
           (PlayerData.VerticalVelocity < PLAYER_LANDING_VELOCITY) AND
@@ -1107,33 +1090,33 @@ begin
       CollectObj.Position.Y := CollectObj.Position.Y + CollectObj.Tag *
         Sin(CollectAngle);
 
-      if (CollectObj.ParentedRect.CenterPoint.X >=
+      if (CollectObj.BoundsRect.CenterPoint.X >=
         (ScreenLayout.Width + (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (ScreenLayout.Position.X + 1) -
           (CollectObj.Width / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y >=
+      if (CollectObj.BoundsRect.CenterPoint.Y >=
         (ScreenLayout.Height + (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (ScreenLayout.Position.Y + 1) -
           (CollectObj.Height / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.X <= (ScreenLayout.Position.X -
+      if (CollectObj.BoundsRect.CenterPoint.X <= (ScreenLayout.Position.X -
         (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (ScreenLayout.Width - 1);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y <= (ScreenLayout.Position.Y -
+      if (CollectObj.BoundsRect.CenterPoint.Y <= (ScreenLayout.Position.Y -
         (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (ScreenLayout.Height - 1);
       end;
 
-      if IntersectRect(Ship.ParentedRect, CollectObj.ParentedRect) then
+      if IntersectRect(Ship.BoundsRect, CollectObj.BoundsRect) then
       begin
         AddScore(100 * PlayerData.Level);
         CollectObj.TagFloat := CollectObj.TagFloat + 1;
@@ -1161,15 +1144,6 @@ begin
 {$IFDEF DEBUG}
   FPSLBL.Text := IntToStr(TThread.GetTickCount - Time) + ' ms';
 {$ENDIF}
-end;
-
-function TGameForm.GetTargetAngle(TargetX, TargetY, OriginX,
-  OriginY: Single): Single;
-var
-  Radians: Single;
-begin
-  Radians := ArcTan2(TargetY - OriginY, TargetX - OriginX);
-  Result := Radians / (PI / 180) + 90;
 end;
 
 procedure TGameForm.GyroBTNClick(Sender: TObject);
