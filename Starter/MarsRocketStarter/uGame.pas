@@ -78,7 +78,6 @@ type
     AccRight: TCircle;
     AccThrustCircle: TCircle;
     AboveCircle: TCircle;
-    MainMenuFrame: TFrameMainMenu;
     SettingsFrame: TFrameSettings;
     GameOverFrame: TFrameGameOver;
     InstructionsFrame: TFrameInstructions;
@@ -99,6 +98,7 @@ type
     WarpActionClick: TAction;
     BombActionClick: TAction;
     DelayedSettings: TTimer;
+    MainMenuFrame: TFrameMainMenu;
     procedure GameLoopTimer(Sender: TObject);
     procedure RightBTNMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);

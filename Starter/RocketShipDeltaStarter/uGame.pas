@@ -141,8 +141,8 @@ type
     Projectile4: TRectangle;
     Projectile5: TRectangle;
     Projectile6: TRectangle;
-    MainMenuFrame: TFrameMainMenu;
     DelayedSettings: TTimer;
+    MainMenuFrame: TFrameMainMenu;
     procedure GameLoopTimer(Sender: TObject);
     procedure RightBTNMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);

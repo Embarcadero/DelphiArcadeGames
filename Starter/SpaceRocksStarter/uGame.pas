@@ -85,7 +85,6 @@ type
     Asteroid3: TRectangle;
     Thruster: TRectangle;
     SettingsFrame: TFrameSettings;
-    MainMenuFrame: TFrameMainMenu;
     ActionList: TActionList;
     LeftActionDown: TAction;
     LeftActionUp: TAction;
@@ -103,6 +102,7 @@ type
     AccUp: TCircle;
     HighScoresFrame: TFrameHighScores;
     DelayedSettings: TTimer;
+    MainMenuFrame: TFrameMainMenu;
     procedure GameLoopTimer(Sender: TObject);
     procedure RightBTNMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);
