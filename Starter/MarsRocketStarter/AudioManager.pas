@@ -39,14 +39,6 @@ type
   end;
   PSoundRec = ^TSoundRec;
 
-{$IFDEF ANDROID}
-  TOnSpoolLoadCallBack = class(TJavaLocal, JSoundPool_OnLoadCompleteListener)
-  private
-  public
-    procedure onLoadComplete(soundPool: JSoundPool; sampleId,status: Integer); cdecl;
-  end;
-{$ENDIF}
-
   TAudioManager = Class
     Private
       fSoundsList : TList;
@@ -89,13 +81,6 @@ implementation
 
 { TAudioManager }
 
-{$IFDEF ANDROID}
-procedure TOnSpoolLoadCallBack.onLoadComplete(soundPool: JSoundPool; sampleId, status: Integer);
-begin
-  GLoaded := True;
- // showmessage('Loaded : ' + inttostr(sampleId));
-end;
-{$ENDIF}
 {$IF Defined(IOS) OR Defined(MACOS)}
 procedure oncompleteionIosProc(SystemSndID : nsinteger; var AData : Pointer);
 begin
@@ -149,6 +134,7 @@ var
   wSndRec : PSoundRec;
   {$IFDEF ANDROID}
     wOnAndroidSndComplete : JSoundPool_OnLoadCompleteListener;
+    soundID: NativeInt;
   {$ENDIF}
   {$IFDEF IOS}
     wSndID : NSInteger;
@@ -166,16 +152,19 @@ begin
     wSndRec.SName := ChangeFileExt(wSndRec.SNameExt,'');
 
     {$IFDEF ANDROID}
-      wOnAndroidSndComplete := TJSoundPool_OnLoadCompleteListener.Wrap((TOnSpoolLoadCallBack.Create as ILocalObject).GetObjectID);
-      fSoundPool.setOnLoadCompleteListener(wOnAndroidSndComplete);
-
       GLoaded := False;
       wSndRec.SID := fSoundPool.load(StringToJString(ASoundFile) ,0);
       while not GLoaded do
-      begin
-        Sleep(10);
-        Application.ProcessMessages;
-      end;
+       begin
+         soundID := fSoundPool.play( wSndRec.SID, 0, 0, 0, 0, 0 );
+         if (soundID>0) then
+          begin
+           fSoundPool.stop( wSndRec.SID );
+           GLoaded := true;
+          end;
+         Sleep(10);
+         Application.ProcessMessages;
+       end;
     {$ENDIF}
     {$IFDEF IOS}
       wNSFilename := CFStringCreateWithCharacters(nil, PChar(ASoundFile), Length(ASoundFile));
