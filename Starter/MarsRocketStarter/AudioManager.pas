@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 
-// This software is Copyright (c) 2016 Embarcadero Technologies, Inc.
+// This software is Copyright (c) 2017 Embarcadero Technologies, Inc.
 // You may only use this software if you are an authorized licensee
 // of Delphi, C++Builder or RAD Studio (Embarcadero Products).
 // This software is considered a Redistributable as defined under
@@ -63,9 +63,6 @@ type
       property SoundsCount : Integer read GetSoundsCount;
       property Sounds[AIndex : integer] : PSoundRec read GetSoundFromIndex ;
   end;
-
-var
-  GLoaded : Boolean;
 
 {$IFDEF IOS}
 Const
@@ -152,19 +149,7 @@ begin
     wSndRec.SName := ChangeFileExt(wSndRec.SNameExt,'');
 
     {$IFDEF ANDROID}
-      GLoaded := False;
       wSndRec.SID := fSoundPool.load(StringToJString(ASoundFile) ,0);
-      while not GLoaded do
-       begin
-         soundID := fSoundPool.play( wSndRec.SID, 0, 0, 0, 0, 0 );
-         if (soundID>0) then
-          begin
-           fSoundPool.stop( wSndRec.SID );
-           GLoaded := true;
-          end;
-         Sleep(10);
-         Application.ProcessMessages;
-       end;
     {$ENDIF}
     {$IFDEF IOS}
       wNSFilename := CFStringCreateWithCharacters(nil, PChar(ASoundFile), Length(ASoundFile));
