@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 
-// This software is Copyright (c) 2016 Embarcadero Technologies, Inc.
+// This software is Copyright (c) 2016-2020 Embarcadero Technologies, Inc.
 // You may only use this software if you are an authorized licensee
 // of Delphi, C++Builder or RAD Studio (Embarcadero Products).
 // This software is considered a Redistributable as defined under
@@ -936,14 +936,9 @@ end;
 
 procedure TGameForm.GameLoopTimer(Sender: TObject);
 var
-  I, II: Integer;
-  ProjAngle, RockAngle, EnemyAngle, EnemyProjAngle, CollectAngle: Single;
-  ProjObj: TRectangle;
-  RockObj: TRectangle;
+  I: Integer;
+  CollectAngle: Single;
   ExplosionObj: TRectangle;
-  RockObjCenterX, RockObjCenterY: Single;
-  EnemyObj: TRectangle;
-  EnemyProjObj: TRectangle;
   CollectObj: TRectangle;
   Time: Cardinal;
   RScreenLimit : single;
@@ -1102,7 +1097,7 @@ begin
     for I := 0 to GroundList.Count - 1 do
     begin
       GroundObj := TRectangle(GroundList.Objects[I]);
-      if IntersectRect(GroundObj.ParentedRect, Ship.ParentedRect) then
+      if IntersectRect(GroundObj.BoundsRect, Ship.BoundsRect) then
       begin
         if (Ship.RotationAngle > -10) AND (Ship.RotationAngle < 10) AND
           (PlayerData.VerticalVelocity < PLAYER_LANDING_VELOCITY) AND
@@ -1152,33 +1147,33 @@ begin
       CollectObj.Position.Y := CollectObj.Position.Y + CollectObj.Tag *
         Sin(CollectAngle);
 
-      if (CollectObj.ParentedRect.CenterPoint.X >=
+      if (CollectObj.BoundsRect.CenterPoint.X >=
         (ScreenLayout.Width + (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (ScreenLayout.Position.X + 1) -
           (CollectObj.Width / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y >=
+      if (CollectObj.BoundsRect.CenterPoint.Y >=
         (ScreenLayout.Height + (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (ScreenLayout.Position.Y + 1) -
           (CollectObj.Height / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.X <= (ScreenLayout.Position.X -
+      if (CollectObj.BoundsRect.CenterPoint.X <= (ScreenLayout.Position.X -
         (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (ScreenLayout.Width - 1);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y <= (ScreenLayout.Position.Y -
+      if (CollectObj.BoundsRect.CenterPoint.Y <= (ScreenLayout.Position.Y -
         (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (ScreenLayout.Height - 1);
       end;
 
-      if IntersectRect(Ship.ParentedRect, CollectObj.ParentedRect) then
+      if IntersectRect(Ship.BoundsRect, CollectObj.BoundsRect) then
       begin
         AddScore(100 * PlayerData.Level);
         CollectObj.TagFloat := CollectObj.TagFloat + 1;
@@ -2242,6 +2237,8 @@ begin
 end;
 
 initialization
+// enables Metal API on iOS and macOS
+FMX.Types.GlobalUseMetal := True;
 
 // enables the GPU on Windows
 // FMX.Types.GlobalUseGPUCanvas := True;

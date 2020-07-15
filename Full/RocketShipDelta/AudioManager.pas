@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 
-// This software is Copyright (c) 2016 Embarcadero Technologies, Inc.
+// This software is Copyright (c) 2017-2020 Embarcadero Technologies, Inc.
 // You may only use this software if you are an authorized licensee
 // of Delphi, C++Builder or RAD Studio (Embarcadero Products).
 // This software is considered a Redistributable as defined under
@@ -16,7 +16,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, FMX.Dialogs, FMX.Forms
   {$IFDEF ANDROID}
     ,androidapi.jni.media, FMX.Helpers.Android, androidapi.jni.JavaTypes, Androidapi.JNI.GraphicsContentViewText,Androidapi.JNIBridge,
-    androidapi.helpers
+    androidapi.helpers, Androidapi.JNI.App, System.Threading
   {$ENDIF}
   {$IFDEF IOS}
     ,MacApi.CoreFoundation, FMX.Platform.iOS, iOSapi.CocoaTypes, iOSapi.AVFoundation,  iOSapi.Foundation
@@ -38,14 +38,6 @@ type
     SID : integer;
   end;
   PSoundRec = ^TSoundRec;
-
-{$IFDEF ANDROID}
-  TOnSpoolLoadCallBack = class(TJavaLocal, JSoundPool_OnLoadCompleteListener)
-  private
-  public
-    procedure onLoadComplete(soundPool: JSoundPool; sampleId,status: Integer); cdecl;
-  end;
-{$ENDIF}
 
   TAudioManager = Class
     Private
@@ -72,9 +64,6 @@ type
       property Sounds[AIndex : integer] : PSoundRec read GetSoundFromIndex ;
   end;
 
-var
-  GLoaded : Boolean;
-
 {$IFDEF IOS}
 Const
   _libAudioToolbox = '/System/Library/Frameworks/AudioToolbox.framework/AudioToolbox';
@@ -89,13 +78,6 @@ implementation
 
 { TAudioManager }
 
-{$IFDEF ANDROID}
-procedure TOnSpoolLoadCallBack.onLoadComplete(soundPool: JSoundPool; sampleId, status: Integer);
-begin
-  GLoaded := True;
- // showmessage('Loaded : ' + inttostr(sampleId));
-end;
-{$ENDIF}
 {$IF Defined(IOS) OR Defined(MACOS)}
 procedure oncompleteionIosProc(SystemSndID : nsinteger; var AData : Pointer);
 begin
@@ -109,7 +91,7 @@ begin
   try
     fSoundsList := TList.Create;
   {$IFDEF ANDROID}
-    fAudioMgr := TJAudioManager.Wrap((SharedActivity.getSystemService(TJContext.JavaClass.AUDIO_SERVICE) as ILocalObject).GetObjectID);
+    fAudioMgr := TJAudioManager.Wrap((TAndroidHelper.Activity.getSystemService(TJContext.JavaClass.AUDIO_SERVICE) as ILocalObject).GetObjectID);
     fSoundPool := TJSoundPool.JavaClass.init(4,TJAudioManager.JavaClass.STREAM_MUSIC, 0);
   {$ENDIF}
 
@@ -148,7 +130,8 @@ function TAudioManager.AddSound(ASoundFile: string) : integer;
 var
   wSndRec : PSoundRec;
   {$IFDEF ANDROID}
-    wOnAndroidSndComplete : JSoundPool_OnLoadCompleteListener;
+    //wOnAndroidSndComplete : JSoundPool_OnLoadCompleteListener;
+    //soundID: NativeInt;
   {$ENDIF}
   {$IFDEF IOS}
     wSndID : NSInteger;
@@ -158,24 +141,15 @@ var
     winRunLoopMode : CFStringRef;
   {$ENDIF}
 begin
+  Result := -1;
   try
-    Result := -1;
     New(wSndRec);
     wSndRec.SFilename := ASoundFile;
     wSndRec.SNameExt := ExtractFilename(ASoundFile);
     wSndRec.SName := ChangeFileExt(wSndRec.SNameExt,'');
 
     {$IFDEF ANDROID}
-      wOnAndroidSndComplete := TJSoundPool_OnLoadCompleteListener.Wrap((TOnSpoolLoadCallBack.Create as ILocalObject).GetObjectID);
-      fSoundPool.setOnLoadCompleteListener(wOnAndroidSndComplete);
-
-      GLoaded := False;
       wSndRec.SID := fSoundPool.load(StringToJString(ASoundFile) ,0);
-      while not GLoaded do
-      begin
-        Sleep(10);
-        Application.ProcessMessages;
-      end;
     {$ENDIF}
     {$IFDEF IOS}
       wNSFilename := CFStringCreateWithCharacters(nil, PChar(ASoundFile), Length(ASoundFile));

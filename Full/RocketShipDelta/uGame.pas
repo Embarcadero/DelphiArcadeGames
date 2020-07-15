@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 
-// This software is Copyright (c) 2016 Embarcadero Technologies, Inc.
+// This software is Copyright (c) 2016-2020 Embarcadero Technologies, Inc.
 // You may only use this software if you are an authorized licensee
 // of Delphi, C++Builder or RAD Studio (Embarcadero Products).
 // This software is considered a Redistributable as defined under
@@ -1434,7 +1434,7 @@ begin
           for II := 0 to EnemyList.Count - 1 do
           begin
             EnemyObj := TRectangle(EnemyList.Objects[II]);
-            if IntersectRect(EnemyObj.ParentedRect, ProjObj.ParentedRect) then
+            if IntersectRect(EnemyObj.BoundsRect, ProjObj.BoundsRect) then
             begin
               EnemyObj.TagFloat := EnemyObj.TagFloat + 1;
               ProjObj.TagFloat := PlayerData.ProjDuration + 1;
@@ -1447,7 +1447,7 @@ begin
           begin
             PersonObj := TRectangle(PeopleList.Objects[II]);
 
-            if IntersectRect(PersonObj.ParentedRect, ProjObj.ParentedRect) then
+            if IntersectRect(PersonObj.BoundsRect, ProjObj.BoundsRect) then
             begin
               PersonObj.TagFloat := PersonObj.TagFloat + 1;
               ProjObj.TagFloat := PlayerData.ProjDuration + 1;
@@ -1509,7 +1509,7 @@ begin
         Sin(EnemyAngle);
 
       if PlayerData.Invulnerable = 0 then
-        if IntersectRect(Ship.ParentedRect, EnemyObj.ParentedRect) then
+        if IntersectRect(Ship.BoundsRect, EnemyObj.BoundsRect) then
         begin
           PlayerHit;
           EnemyObj.TagFloat := EnemyObj.TagFloat + 1;
@@ -1522,7 +1522,7 @@ begin
           for II := 0 to PeopleList.Count - 1 do
           begin
             PersonObj := TRectangle(PeopleList.Objects[II]);
-            if IntersectRect(PersonObj.ParentedRect, EnemyObj.ParentedRect) AND
+            if IntersectRect(PersonObj.BoundsRect, EnemyObj.BoundsRect) AND
               (PersonObj.TagString = PEOPLE_STATE_NONE) then
             begin
               PersonObj.TagObject := EnemyObj;
@@ -1618,7 +1618,7 @@ begin
         Sin(EnemyProjAngle);
 
       if PlayerData.Invulnerable = 0 then
-        if IntersectRect(Ship.ParentedRect, EnemyProjObj.ParentedRect) then
+        if IntersectRect(Ship.BoundsRect, EnemyProjObj.BoundsRect) then
         begin
           PlayerHit;
           EnemyProjObj.TagFloat := EnemyProjObj.TagFloat + 1;
@@ -1754,33 +1754,33 @@ begin
       CollectObj.Position.Y := CollectObj.Position.Y + CollectObj.Tag *
         Sin(CollectAngle);
 
-      if (CollectObj.ParentedRect.CenterPoint.X >=
+      if (CollectObj.BoundsRect.CenterPoint.X >=
         (MapLayout1.Width + (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (MapLayout1.Position.X + 1) -
           (CollectObj.Width / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y >=
+      if (CollectObj.BoundsRect.CenterPoint.Y >=
         (MapLayout1.Height + (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (MapLayout1.Position.Y + 1) -
           (CollectObj.Height / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.X <=
+      if (CollectObj.BoundsRect.CenterPoint.X <=
         (MapLayout1.Position.X - (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (MapLayout1.Width - 1);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y <=
+      if (CollectObj.BoundsRect.CenterPoint.Y <=
         (MapLayout1.Position.Y - (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (MapLayout1.Height - 1);
       end;
 
-      if IntersectRect(Ship.ParentedRect, CollectObj.ParentedRect) then
+      if IntersectRect(Ship.BoundsRect, CollectObj.BoundsRect) then
       begin
         AddScore(5000);
         CollectObj.TagFloat := COLLECTITEM_DURATION + 1;
@@ -1837,7 +1837,7 @@ begin
     if Portal2.TagFloat > 0 then
       Portal2.TagFloat := Portal2.TagFloat - 1;
 
-    if IntersectRect(Ship.ParentedRect, Portal1.ParentedRect) then
+    if IntersectRect(Ship.BoundsRect, Portal1.BoundsRect) then
     begin
       if Portal1.TagFloat = 0 then
       begin
@@ -1845,7 +1845,7 @@ begin
         WarpToObject(Portal2);
       end;
     end
-    else if IntersectRect(Ship.ParentedRect, Portal2.ParentedRect) then
+    else if IntersectRect(Ship.BoundsRect, Portal2.BoundsRect) then
     begin
       if Portal2.TagFloat = 0 then
       begin
@@ -3325,6 +3325,8 @@ begin
 end;
 
 initialization
+// enables Metal API on iOS and macOS
+// FMX.Types.GlobalUseMetal := True;
 
 // enable the GPU on Windows
 // FMX.Types.GlobalUseGPUCanvas := True;

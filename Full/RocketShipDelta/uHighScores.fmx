@@ -22,7 +22,6 @@ object FrameHighScores: TFrameHighScores
     Size.Width = 380.000000000000000000
     Size.Height = 32.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 16
     Text = 'Continue'
   end
   object ListView1: TListView
@@ -39,7 +38,6 @@ object FrameHighScores: TFrameHighScores
     Size.Width = 440.000000000000000000
     Size.Height = 179.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 33
     ItemAppearanceObjects.ItemObjects.Accessory.Visible = False
     CanSwipeDelete = False
     ShowSelection = False
@@ -93,7 +91,6 @@ object FrameHighScores: TFrameHighScores
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       Align = Center
       StyleLookup = 'clearingeditstyle'
-      TabOrder = 1
       Size.Width = 246.000000000000000000
       Size.Height = 37.000000000000000000
       Size.PlatformDefault = False
@@ -104,7 +101,6 @@ object FrameHighScores: TFrameHighScores
       Size.Width = 319.000000000000000000
       Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 2
       ColumnCollection = <
         item
           Value = 50.000000000000000000
@@ -134,7 +130,6 @@ object FrameHighScores: TFrameHighScores
         Size.Width = 97.000000000000000000
         Size.Height = 36.000000000000000000
         Size.PlatformDefault = False
-        TabOrder = 0
         Text = 'Okay'
         OnClick = OkayBTNClick
       end
@@ -145,7 +140,6 @@ object FrameHighScores: TFrameHighScores
         Size.Width = 98.000000000000000000
         Size.Height = 36.000000000000000000
         Size.PlatformDefault = False
-        TabOrder = 1
         Text = 'Cancel'
         OnClick = CancelBTNClick
       end
@@ -224,6 +218,7 @@ object FrameHighScores: TFrameHighScores
       end>
   end
   object FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink
+    EngineLinkage = slStatic
     Left = 384
     Top = 220
   end

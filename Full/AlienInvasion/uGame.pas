@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 
-// This software is Copyright (c) 2016 Embarcadero Technologies, Inc.
+// This software is Copyright (c) 2016-2020 Embarcadero Technologies, Inc.
 // You may only use this software if you are an authorized licensee
 // of Delphi, C++Builder or RAD Studio (Embarcadero Products).
 // This software is considered a Redistributable as defined under
@@ -1104,7 +1104,7 @@ begin
           EnemyObj := TRectangle(EnemyList.Objects[II]);
           if EnemyObj.Tag <> 0 then
           begin
-            EnemyRect := EnemyObj.ParentedRect;
+            EnemyRect := EnemyObj.BoundsRect;
           end
           else
             EnemyRect := EnemyObj.AbsoluteRect;
@@ -1143,7 +1143,7 @@ begin
         for II := 0 to CollectList.Count - 1 do
         begin
           CollectObj := TRectangle(CollectList.Objects[II]);
-          if IntersectRect(CollectObj.ParentedRect, ProjObj.ParentedRect) then
+          if IntersectRect(CollectObj.BoundsRect, ProjObj.BoundsRect) then
           // if IntersectRect(CollectObj.AbsoluteRect, ProjObj.AbsoluteRect) then
           // if RockObj.PointInObject(ProjObj.Position.X,ProjObj.Position.Y) then
           begin
@@ -1371,27 +1371,27 @@ begin
       CollectObj.Position.Y := CollectObj.Position.Y + CollectObj.Tag *
         Sin(CollectAngle);
 
-      if (CollectObj.ParentedRect.CenterPoint.X >=
+      if (CollectObj.BoundsRect.CenterPoint.X >=
         (ScreenLayout.Width + (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (ScreenLayout.Position.X + 1) -
           (CollectObj.Width / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y >=
+      if (CollectObj.BoundsRect.CenterPoint.Y >=
         (ScreenLayout.Height + (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (ScreenLayout.Position.Y + 1) -
           (CollectObj.Height / 2);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.X <= (ScreenLayout.Position.X -
+      if (CollectObj.BoundsRect.CenterPoint.X <= (ScreenLayout.Position.X -
         (CollectObj.Width / 2))) then
       begin
         CollectObj.Position.X := (ScreenLayout.Width - 1);
       end;
 
-      if (CollectObj.ParentedRect.CenterPoint.Y <= (ScreenLayout.Position.Y -
+      if (CollectObj.BoundsRect.CenterPoint.Y <= (ScreenLayout.Position.Y -
         (CollectObj.Height / 2))) then
       begin
         CollectObj.Position.Y := (ScreenLayout.Height - 1);
@@ -2634,6 +2634,8 @@ begin
 end;
 
 initialization
+// enables Metal API on iOS and macOS
+FMX.Types.GlobalUseMetal := True;
 
 // enables the GPU on Windows
 //FMX.Types.GlobalUseGPUCanvas := True;
